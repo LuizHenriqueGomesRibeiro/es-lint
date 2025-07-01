@@ -1,3 +1,3 @@
-export default function dwdw() {
-    return
-}
+export default ({ text }: { text: string }) => <>
+    hello component, say: { text }
+</> 

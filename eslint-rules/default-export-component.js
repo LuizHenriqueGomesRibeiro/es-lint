@@ -3,7 +3,7 @@ export default {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Aceitar somente export default function anônima',
+      description: 'Permitir somente export default com arrow function anônima com retorno JSX implícito',
     },
     schema: [],
   },
@@ -12,20 +12,29 @@ export default {
       ExportDefaultDeclaration(node) {
         const decl = node.declaration
 
-        if (
-          decl.type === 'FunctionDeclaration' &&
-          decl.id !== null
-        ) {
+        if (decl.type !== 'ArrowFunctionExpression') {
           context.report({
             node,
-            message: 'Só é permitido export default function anônima, sem nome.',
+            message: 'Somente arrow function anônima com retorno JSX implícito é permitida no export default.',
+          })
+          return
+        }
+
+        const isJSX =
+          decl.body.type === 'JSXElement' || decl.body.type === 'JSXFragment'
+
+        if (!isJSX) {
+          context.report({
+            node,
+            message: 'Arrow function deve ter retorno implícito JSX (sem chaves e return).',
           })
         }
       },
+
       ExportNamedDeclaration(node) {
         context.report({
           node,
-          message: 'Componentes devem ser exportados como default.',
+          message: 'Somente export default é permitido. Exporte componentes apenas como export default.',
         })
       },
     }
