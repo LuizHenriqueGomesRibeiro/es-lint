@@ -1,4 +1,5 @@
 import defaultExportComponentRule from './eslint-rules/default-export-component.js'
+import defaultExportHookRule from './eslint-rules/default-export-hook.js'
 import reactHooks from 'eslint-plugin-react-hooks'
 import tseslint from 'typescript-eslint'
 import globals from 'globals'
@@ -21,7 +22,20 @@ export default tseslint.config([
     },
   },
   {
-    files: ['src/components/**/*.{ts,tsx}'],
+    files: ['src/packages/core/hooks/**/*.{tsx}'],
+    rules: {
+      'custom/default-export-hook': 'error',
+    },
+    plugins: {
+      custom: {
+        rules: {
+          'default-export-hook': defaultExportHookRule,
+        },
+      },
+    },
+  },
+  {
+    files: ['src/packages/ui/components/**/*.{ts,tsx}'],
     rules: {
       'custom/default-export-component': 'error',
     },
