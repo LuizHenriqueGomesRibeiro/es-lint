@@ -1,4 +1,3 @@
-
-export default function hellofunction() {
-
+export default function dwdw() {
+    return
 }

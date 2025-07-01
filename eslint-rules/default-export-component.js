@@ -3,24 +3,31 @@ export default {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Força exportação default para componentes React',
+      description: 'Aceitar somente export default function anônima',
     },
     schema: [],
   },
   create(context) {
     return {
-      ExportNamedDeclaration(node) {
+      ExportDefaultDeclaration(node) {
+        const decl = node.declaration
+
         if (
-          node.declaration &&
-          (node.declaration.type === 'FunctionDeclaration' ||
-            node.declaration.type === 'VariableDeclaration')
+          decl.type === 'FunctionDeclaration' &&
+          decl.id !== null
         ) {
           context.report({
             node,
-            message: 'Componentes devem ser exportados como default.',
-          });
+            message: 'Só é permitido export default function anônima, sem nome.',
+          })
         }
       },
-    };
+      ExportNamedDeclaration(node) {
+        context.report({
+          node,
+          message: 'Componentes devem ser exportados como default.',
+        })
+      },
+    }
   },
-};
+}
